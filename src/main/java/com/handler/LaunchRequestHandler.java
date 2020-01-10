@@ -8,7 +8,7 @@ import com.amazon.ask.request.Predicates;
 
 import java.util.Optional;
 
-import static com.constants.MessageConstants.WELCOME_MESSAGE;
+import static com.constants.MessageConstants.WELCOME_MESSAGE_ANONYMOUS;
 
 public class LaunchRequestHandler implements RequestHandler {
     @Override
@@ -19,9 +19,9 @@ public class LaunchRequestHandler implements RequestHandler {
     @Override
     public Optional<Response> handle(HandlerInput input) {
         return input.getResponseBuilder()
-                .withSpeech(WELCOME_MESSAGE)
-                .withSimpleCard("WELCOME", WELCOME_MESSAGE)
-                .withReprompt(WELCOME_MESSAGE)
+                .withSpeech(WELCOME_MESSAGE_ANONYMOUS)
+                .withSimpleCard("WELCOME", WELCOME_MESSAGE_ANONYMOUS)
+                .withReprompt(WELCOME_MESSAGE_ANONYMOUS)
                 .build();
     }
 }
