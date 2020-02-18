@@ -21,4 +21,8 @@ public interface MessageConstants {
     //stopIntent
     String GOODBYE_MESSAGE = "Goodbye";
 
+    //itemsIntent
+    String ITEM_ERROR_MESSAGE = "Sorry, Something wrong with your request. Please try one more time latter";
+    String ITEM_SUCCESS_MESSAGE = "Done";
+
 }
