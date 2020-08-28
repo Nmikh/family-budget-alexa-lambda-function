@@ -1,0 +1,82 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "budget manager",
+      "modelConfiguration": {
+        "fallbackIntentSensitivity": {
+          "level": "LOW"
+        }
+      },
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "help me",
+            "help"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [
+            "stop",
+            "goodbye",
+            "bye"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "AuthIntent",
+          "slots": [
+            {
+              "name": "userOTP",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "authorize me with password {userOTP}"
+          ]
+        },
+        {
+          "name": "BudgetIntent",
+          "slots": [],
+          "samples": [
+            "get my balance",
+            "get my budget"
+          ]
+        },
+        {
+          "name": "ItemsIntent",
+          "slots": [
+            {
+              "name": "price",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "itemName",
+              "type": "AMAZON.Book"
+            },
+            {
+              "name": "categoryName",
+              "type": "AMAZON.Book"
+            }
+          ],
+          "samples": [
+            "add to {categoryName} the {itemName} with price {price}"
+          ]
+        }
+      ],
+      "types": []
+    }
+  }
+}
