@@ -1,24 +1,30 @@
 package com.back.service;
 
-import com.back.model.AuthoriseModel;
-import com.back.model.CategoryItem;
+import com.back.model.Item;
+import com.back.model.ItemDTO;
 import com.back.model.User;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.logging.Logger;
 
-import static java.time.LocalDateTime.now;
+import static java.lang.String.format;
 import static java.util.Objects.isNull;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 public class BackApiService {
-    private static BackApiService backApiService;
+    public static final Logger logger = Logger.getLogger(BackApiService.class.getName());
+
     private static final String BACK_API_URL = System.getenv("BACK_API_URL");
-    private static String AUTH_BACK_API_URL = "/auth";
-    private static String ITEMS_BACK_API_URL = "/item/%s/%s";
+    private static final String AUTH_API_URL = "%s/alexa/auth/%s";
+    private static final String BUDGET_BALANCE_API_URL = "%s/alexa/balance";
+    private static final String ITEM_API_URL = "%s/alexa/item";
+
+    private static BackApiService backApiService;
 
     private BackApiService() {
     }
@@ -31,24 +37,61 @@ public class BackApiService {
         return backApiService;
     }
 
-    public User authorizeAlexaOnServer(String userOTP, String alexaId) {
+    public User authorizeAlexaOnApi(String userOTP, String alexaId) {
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            AuthoriseModel authoriseModel = new AuthoriseModel(alexaId, userOTP);
-            HttpEntity entity = new HttpEntity(authoriseModel, null);
+            String url = format(AUTH_API_URL, BACK_API_URL, userOTP);
 
-            ResponseEntity<User> exchange = restTemplate.exchange(BACK_API_URL + AUTH_BACK_API_URL, POST, entity, User.class);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("alexaId", alexaId);
+
+            HttpEntity entity = new HttpEntity(httpHeaders);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<User> exchange = restTemplate.exchange(url, POST, entity, User.class);
+
+            return exchange.getBody();
+        } catch (Exception ex) {
+            logger.info(ex.getMessage());
+            return null;
+        }
+    }
+
+    public User getUserBalance(String alexaId) {
+        try {
+            String url = format(BUDGET_BALANCE_API_URL, BACK_API_URL);
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("alexaId", alexaId);
+
+            HttpEntity entity = new HttpEntity(httpHeaders);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<User> exchange = restTemplate.exchange(url, GET, entity, User.class);
+
             return exchange.getBody();
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public void addItemToUserCategory(String alexaId, String categoryName, String itemName, double price){
-        CategoryItem categoryItem = CategoryItem.builder().name(itemName).price(price).itemsDate(now()).build();
-        HttpEntity entity = new HttpEntity(categoryItem, null);
+    public Item createItem(String alexaId, ItemDTO itemDTO) {
+        try {
+            String url = format(ITEM_API_URL, BACK_API_URL);
 
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.exchange(BACK_API_URL + String.format(ITEMS_BACK_API_URL, alexaId, categoryName), POST, entity, Object.class);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("alexaId", alexaId);
+            httpHeaders.setContentType(APPLICATION_JSON);
+
+            HttpEntity entity = new HttpEntity(itemDTO, httpHeaders);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<Item> exchange = restTemplate.exchange(url, POST, entity, Item.class);
+
+            return exchange.getBody();
+        } catch (Exception ex) {
+            logger.info(ex.getMessage());
+
+            return null;
+        }
     }
 }

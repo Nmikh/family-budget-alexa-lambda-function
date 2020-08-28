@@ -3,22 +3,19 @@ package com.back.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.sql.Date;
 
-@EqualsAndHashCode
-@ToString
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Data
-public class CategoryItem {
-
+public class Item {
+    private long id;
     private String name;
-    private LocalDateTime itemsDate;
+    private String description;
+    private Date itemDate;
     private double price;
+    private Category category;
 }

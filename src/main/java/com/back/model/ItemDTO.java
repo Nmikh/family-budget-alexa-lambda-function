@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Data
-public class User {
-    private String username;
-    private double budget;
+@Builder
+public class ItemDTO {
+    private String categoryName;
+    private String name;
+    private String description;
+    private double price;
 }

@@ -8,6 +8,7 @@ import com.back.model.User;
 import com.back.service.BackApiService;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static com.amazon.ask.request.Predicates.intentName;
 import static com.constants.HandleConstants.AUTH_INTENT_HANDLER_NAME;
@@ -16,6 +17,8 @@ import static com.constants.MessageConstants.WELCOME_MESSAGE;
 import static java.util.Objects.isNull;
 
 public class AuthIntentHandler implements RequestHandler {
+    public static final Logger logger = Logger.getLogger(AuthIntentHandler.class.getName());
+
     private BackApiService backApiService;
 
     public AuthIntentHandler() {
@@ -33,7 +36,7 @@ public class AuthIntentHandler implements RequestHandler {
         String userOTP = requestHelper.getSlotValue("userOTP").get();
         String alexaUserId = input.getRequestEnvelope().getSession().getUser().getUserId();
 
-        User user = backApiService.authorizeAlexaOnServer(userOTP, alexaUserId);
+        User user = backApiService.authorizeAlexaOnApi(userOTP, alexaUserId);
 
         String message;
         if (isNull(user)) {
